@@ -35,17 +35,17 @@ The lab is now accessible at `http://localhost`. All traffic must be routed thro
 ## The Challenges
 The gateway routes to different challenges based on the URL path. Your objective in each node is to escalate from a guest role to an admin role and retrieve the environment flag.
 
-- **Node 1:** The Null Cipher (/chal1/) - The backend fails to enforce strict cryptographic standards. Intercept the standard token, manipulate the header to use the none algorithm, and forge an admin payload.
+- **Challenges 1:** The Null Cipher (/chal1/) - The backend fails to enforce strict cryptographic standards. Intercept the standard token, manipulate the header to use the none algorithm, and forge an admin payload.
 
-- **Node 2:** The Weak Link (/chal2/) - The signature is cryptographically sound, but the human element failed. Capture the token and utilize offline dictionary attacks to uncover the weak symmetric key.
+- **Challenges 2:** The Weak Link (/chal2/) - The signature is cryptographically sound, but the human element failed. Capture the token and utilize offline dictionary attacks to uncover the weak symmetric key.
 
-- **Node 3:** The Ghost in the Path (/chal3/) - The application dynamically loads verification keys based on user input. Exploit a Path Traversal vulnerability via the kid header to force the server to verify against an empty file.
+- **Challenges 3:** The Ghost in the Path (/chal3/) - The application dynamically loads verification keys based on user input. Exploit a Path Traversal vulnerability via the kid header to force the server to verify against an empty file.
 
-- **Node 4:** The Hydra (/chal4/) - This node utilizes JWS JSON Serialization for complex workflows. Exploit a logical flaw in the multi-signature validation loop to inject a rogue signature and bypass access controls.
+- **Challenges 4:** The Hydra (/chal4/) - This node utilizes JWS JSON Serialization for complex workflows. Exploit a logical flaw in the multi-signature validation loop to inject a rogue signature and bypass access controls.
 
-- *Node 5:* The Doppelgänger (/chal5/) - The server expects asymmetric RS256 signatures. Force an Algorithm Confusion attack by switching the header to HS256 and signing your payload with the server's own public key.
+- **Challenges 5:** The Doppelgänger (/chal5/) - The server expects asymmetric RS256 signatures. Force an Algorithm Confusion attack by switching the header to HS256 and signing your payload with the server's own public key.
 
-- **Node 6:** The Remote Hijack (/chal6/) - The backend dynamically fetches public keys based on the jku header. Host a malicious JSON Web Key Set (JWKS) and redirect the server to trust your rogue cryptographic material.
+- **Challenges 6:** The Remote Hijack (/chal6/) - The backend dynamically fetches public keys based on the jku header. Host a malicious JSON Web Key Set (JWKS) and redirect the server to trust your rogue cryptographic material.
 
 ## Teardown
 To stop the containers and remove the isolated network, run the following command in the root directory:
