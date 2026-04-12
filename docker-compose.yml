@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  nginx_proxy:
+    image: nginx:latest
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - chal1_none
+      - chal2_brute
+      - chal3_kid
+      - chal4_json_serial
+      - chal5_alg_confusion
+      - chal6_jku
+
+  chal1_none:
+    build: ./chal1_none
+    container_name: writeupdb_jwt_chal1
+
+  chal2_brute:
+    build: ./chal2_brute
+    container_name: writeupdb_jwt_chal2
+
+  chal3_kid:
+    build: ./chal3_kid_injection
+    container_name: writeupdb_jwt_chal3
+
+  chal4_json_serial:
+    build: ./chal4_json_serial
+    container_name: writeupdb_jwt_chal4
+
+  chal5_alg_confusion:
+    build: ./chal5_alg_confusion
+    container_name: writeupdb_jwt_chal5
+
+  chal6_jku:
+    build: ./chal6_jku_attack
+    container_name: writeupdb_jwt_chal6
