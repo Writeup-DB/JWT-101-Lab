@@ -21,7 +21,7 @@ To deploy and interact with this environment, you will need the following tools:
 Clone this repository to your local machine and use Docker Compose to spin up the neural net.
 ```bash
 # Clone the repository
-git clone https://github.com/YourOrg/Project-N30N-JWT.git
+git clone https://github.com/Writeup-DB/JWT-101-Lab.git
 cd Project-N30N-JWT
 
 # Build and deploy the environment in detached mode
