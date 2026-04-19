@@ -1,8 +1,10 @@
-# JWT-101-Lab
+# JWT-101-Lab: Token Heist by @touhidshaikh22
 
 Welcome to Project Jwt 101. This vulnerable environment is designed to provide hands-on experience with the attack vectors associated with JSON Web Tokens (JWT, JWS, and JWE).
 
 Jack into the system, intercept the tokens, and manipulate the cryptography to escalate your privileges across six distinct, isolated nodes.
+<img width="1638" height="928" alt="image" src="https://github.com/user-attachments/assets/16db5c76-634e-4793-b9d7-46c7ab0ab21b" />
+
 
 ## System Architecture
 This lab is built on a microservices architecture to mimic production environments. An Nginx API Gateway acts as the central dispatcher, routing traffic to six independent, vulnerable Python (Flask) containers.
@@ -20,15 +22,10 @@ To deploy and interact with this environment, you will need the following tools:
 ## Deployment Instructions
 Clone this repository to your local machine and use Docker Compose to spin up the neural net.
 ```bash
-# Clone the repository
 git clone https://github.com/Writeup-DB/JWT-101-Lab.git
-cd Project-N30N-JWT
-
-# Build and deploy the environment in detached mode
+cd JWT-101-Lab
 docker-compose up --build -d
-
-# Verify all 7 containers (1 Proxy + 6 Challenges) are running
-docker-compose ps
+docker-compose ps # Verify all 7 containers (1 Proxy + 6 Challenges) are running
 ```
 The lab is now accessible at `http://localhost`. All traffic must be routed through this entry point.
 
