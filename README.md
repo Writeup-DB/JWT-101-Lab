@@ -53,5 +53,9 @@ To stop the containers and remove the isolated network, run the following comman
 docker-compose down
 ```
 
+## Private and Public Key Gen
+1. Generate the Private Key: `openssl genrsa -out private.pem 2048`
+2. Extract the Public Key: `openssl rsa -in private.pem -pubout -out public.pem`
+
 ## Disclaimer
 This project is created strictly for educational purposes and authorized security research. The vulnerabilities demonstrated here are intentionally implemented. Do not deploy this application in a production environment or expose it to the public internet without strict access controls. Always obtain explicit permission before testing external systems.
