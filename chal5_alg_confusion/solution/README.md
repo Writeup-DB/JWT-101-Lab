@@ -7,7 +7,7 @@ The server expects RS256 (Asymmetric) but will blindly process HS256 (Symmetric)
 4. Submit: The server will grab its public key, see you used `HS256`, and use that public key string as a symmetric HMAC password to validate your forged token.
 
 
-### Note - It will not work by default
+### Note - It will not work by default (Already Updated the Code for PyJWT 1.7.1)
 The application is using PyJWT==2.8.0. Modern versions of the PyJWT library explicitly check for the Algorithm Confusion vulnerability (CVE-2015-9256). When the library sees an asymmetric key (like your RSA public key starting with -----BEGIN PUBLIC KEY-----) being passed alongside a symmetric algorithm (HS256), it hard-blocks the operation and throws the exact error you received.
 
 If you wanna make this challenge work make modificaitons.
