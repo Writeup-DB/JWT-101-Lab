@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writeup-DB Academy: Token Heist</title>
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --panel-bg: #1a1a1a;
+            --neon-green: #0f0;
+            --neon-red: #f00;
+            --neon-blue: #0ff;
+            --text-main: #ccc;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .chal-card {
+            background-color: var(--panel-bg);
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: inset 0 0 10px #000;
+            transition: border-color 0.3s;
+        }
+        .chal-card:hover {
+            border-color: var(--neon-blue);
+        }
+        .chal-title {
+            color: var(--neon-green);
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 10px;
+            font-family: monospace;
+            margin: 10px 0;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        button {
+            background-color: transparent;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 10px 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background-color: var(--neon-blue);
+            color: #000;
+        }
+        .btn-exploit {
+            color: var(--neon-red);
+            border-color: var(--neon-red);
+            float: right;
+        }
+        .btn-exploit:hover {
+            background-color: var(--neon-red);
+            color: #000;
+        }
+        .output-console {
+            margin-top: 15px;
+            padding: 10px;
+            background: #000;
+            border: 1px dashed #444;
+            min-height: 40px;
+            word-wrap: break-word;
+        }
+        .success-flag {
+            color: #000;
+            background-color: var(--neon-green);
+            padding: 10px;
+            font-weight: bold;
+            text-shadow: none;
+            text-align: center;
+            animation: pulse 1.5s infinite;
+        }
+        .error-msg {
+            color: var(--neon-red);
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 5px var(--neon-green); }
+            50% { box-shadow: 0 0 20px var(--neon-green); }
+            100% { box-shadow: 0 0 5px var(--neon-green); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>[ Writeup-DB Academy: Token Heist ]</h1>
+
+    <div class="grid-container" id="challenge-grid">
+        </div>
+
+    <script>
+        const challenges = [
+            { id: 1, title: "Node 01: The Null Cipher", desc: "Exploit the validation logic by changing the algorithm to 'none' and stripping the signature." },
+            { id: 2, title: "Node 02: The Weak Link", desc: "The token is signed securely, but the secret is weak. Brute-force the secret offline to forge an admin token." },
+            { id: 3, title: "Node 03: Ghost in the Path", desc: "The server fetches keys based on the 'kid' header. Exploit path traversal to use an empty file (/dev/null) as the key." },
+            { id: 4, title: "Node 04: The Hydra (JSON)", desc: "Analyzes an array of signatures. Append a second signature signed with the guest key to bypass the admin check." },
+            { id: 5, title: "Node 05: The Doppelgänger", desc: "Algorithm confusion. Switch RS256 to HS256 and sign the token using the server's public key string as the HMAC secret." },
+            { id: 6, title: "Node 06: Remote Hijack", desc: "Inject a malicious 'jku' header pointing to your own hosted JWKS file containing your public key." }
+        ];
+
+        const grid = document.getElementById('challenge-grid');
+
+        // Render UI Cards
+        challenges.forEach(chal => {
+            grid.innerHTML += `
+                <div class="chal-card">
+                    <h2 class="chal-title">${chal.title}</h2>
+                    <p>${chal.desc}</p>
+                    <button onclick="authenticate(${chal.id})">1. Initialize Connection (Login)</button>
+                    <textarea id="token-input-${chal.id}" placeholder="Awaiting Token Data..."></textarea>
+                    <button class="btn-exploit" onclick="submitExploit(${chal.id})">2. Submit Exploit</button>
+                    <div class="output-console" id="output-${chal.id}">> System Ready.</div>
+                </div>
+            `;
+        });
+
+        // 1. Fetch the initial token from the backend
+        async function authenticate(id) {
+            const output = document.getElementById(`output-${id}`);
+            const textarea = document.getElementById(`token-input-${id}`);
+            output.innerHTML = "> Establishing secure link...";
+            
+            try {
+                const res = await fetch(`/api/chal${id}/`);
+                const data = await res.json();
+                
+                // Challenge 4 returns a JSON object, others return a string
+                if (id === 4) {
+                    textarea.value = JSON.stringify(data.token, null, 2);
+                } else {
+                    textarea.value = data.token;
+                }
+                output.innerHTML = `> <span style="color:var(--neon-blue)">${data.message || "Token Acquired. Awaiting manipulation."}</span>`;
+            } catch (err) {
+                output.innerHTML = `> <span class="error-msg">Connection failed to Node ${id}</span>`;
+            }
+        }
+
+        // 2. Submit the manipulated token to the backend
+        async function submitExploit(id) {
+            const output = document.getElementById(`output-${id}`);
+            const tokenData = document.getElementById(`token-input-${id}`).value.trim();
+            
+            if (!tokenData) {
+                output.innerHTML = `> <span class="error-msg">Error: Token payload is empty.</span>`;
+                return;
+            }
+
+            output.innerHTML = "> Executing payload...";
+
+            let headers = {};
+            let body = null;
+            let method = 'GET';
+
+            // Challenge 4 uses POST with JSON. The rest use GET with Bearer Auth.
+            if (id === 4) {
+                method = 'POST';
+                headers['Content-Type'] = 'application/json';
+                body = tokenData; 
+            } else {
+                headers['Authorization'] = `Bearer ${tokenData}`;
+            }
+
+            try {
+                const res = await fetch(`/api/chal${id}/admin`, { method, headers, body });
+                const data = await res.json();
+
+                if (data.flag) {
+                    // Success! Display the glowing Flag
+                    output.innerHTML = `<div class="success-flag">SYSTEM COMPROMISED<br><br>${data.flag}</div>`;
+                } else {
+                    // Failed attempt
+                    output.innerHTML = `> <span class="error-msg">${data.error || data.message}</span>`;
+                }
+            } catch (err) {
+                output.innerHTML = `> <span class="error-msg">Exploit failed: Network Error</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
