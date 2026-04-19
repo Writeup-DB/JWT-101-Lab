@@ -3,6 +3,7 @@
 Welcome to Project Jwt 101. This vulnerable environment is designed to provide hands-on experience with the attack vectors associated with JSON Web Tokens (JWT, JWS, and JWE).
 
 Jack into the system, intercept the tokens, and manipulate the cryptography to escalate your privileges across six distinct, isolated nodes.
+
 <img width="1638" height="928" alt="image" src="https://github.com/user-attachments/assets/16db5c76-634e-4793-b9d7-46c7ab0ab21b" />
 
 
