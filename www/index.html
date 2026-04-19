@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Writeup-DB Academy: Token Heist</title>
+    <title>JWT-101-Lab: Token Heist by @touhidshaikh22</title>
     <style>
         :root {
             --bg-color: #0d0d0d;
@@ -111,6 +111,32 @@
             50% { box-shadow: 0 0 20px var(--neon-green); }
             100% { box-shadow: 0 0 5px var(--neon-green); }
         }
+        /* --- FOOTER STYLES --- */
+        .system-footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px dashed #444;
+            font-size: 0.9em;
+            color: #888;
+        }
+        .system-footer p {
+            margin: 5px 0;
+        }
+        .system-footer .author {
+            color: var(--neon-blue);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .system-footer a {
+            color: var(--neon-green);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .system-footer a:hover {
+            text-shadow: 0 0 10px var(--neon-green);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -199,7 +225,7 @@
 
                 if (data.flag) {
                     // Success! Display the glowing Flag
-                    output.innerHTML = `<div class="success-flag">SYSTEM COMPROMISED<br><br>${data.flag}</div>`;
+                    output.innerHTML = `<div class="success-flag">ADMIN SYSTEM COMPROMISED<br><br>${data.flag}</div>`;
                 } else {
                     // Failed attempt
                     output.innerHTML = `> <span class="error-msg">${data.error || data.message}</span>`;
@@ -209,5 +235,10 @@
             }
         }
     </script>
+    <footer class="system-footer">
+        <p>SYSTEM ARCHITECT: <span class="author">Touhid Shaikh (touhidshaikh22)</span></p>
+        <p>SOURCE CODE: <a href="https://github.com/Writeup-DB/JWT-101-Lab" target="_blank">[ github.com/Writeup-DB/JWT-101-Lab ]</a></p>
+        <p>POWERED BY WRITEUP-DB ACADEMY</p>
+    </footer>
 </body>
 </html>
